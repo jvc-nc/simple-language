@@ -119,7 +119,17 @@ public class ReachingDefs {
                 }
                 reachIn.put(nLabel, defsFromPredecessors);
 
-                // TODO: Compute reach out!
+                Set<Def> in = reachIn.get(nLabel);
+                Set<Def> genSet = gen.get(nLabel);
+                Set<Def> killSet = kills.get(nLabel);
+
+                Set<Def> inMinKill = new HashSet<>(in);
+                inMinKill.removeAll(killSet);
+
+                Set<Def> out = new HashSet<>(genSet);
+                out.addAll(inMinKill);
+
+                reachOut.put(nLabel, out);
             }
 
         } while (!reachIn.equals(oldReachIn) || !reachOut.equals(oldReachOut));
@@ -273,3 +283,5 @@ public class ReachingDefs {
         }
     }
 }
+
+
